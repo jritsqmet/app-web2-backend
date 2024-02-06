@@ -2,6 +2,9 @@ package com.itsqmet.Biblioteca;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class BibliotecaApplication {
@@ -10,7 +13,7 @@ public class BibliotecaApplication {
 		SpringApplication.run(BibliotecaApplication.class, args);
 	}
 
-	/*
+	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
@@ -21,6 +24,6 @@ public class BibliotecaApplication {
 		};
 	}
 	
-	 */
+	 
 
 }

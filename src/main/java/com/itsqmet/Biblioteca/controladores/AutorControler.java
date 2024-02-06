@@ -4,63 +4,87 @@ import com.itsqmet.Biblioteca.entidades.Autor;
 import com.itsqmet.Biblioteca.entidades.Libro;
 import com.itsqmet.Biblioteca.repositorios.AutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+//@Controller
+@RestController
 public class AutorControler {
 
     @Autowired
     AutorRepository autorRepository;
 
-    // READ
-    @GetMapping("/autores")
-    public String autor(Model model){
-
+    /////////////////////////////////////
+    // LEER - Obtener todos los autores
+    /////////////////////////////////////
+    @GetMapping("/autores2")
+    public List<Autor> autores() {
+        // Recuperar todos los autores de la base de datos
         List<Autor> autores = autorRepository.findAll();
-        model.addAttribute("autores", autores);
-
-        return "/autor/autor";
+        return autores; // Devolver la lista de autores
     }
 
-    // CREAR
-    @GetMapping("/autor/form")
-    public String formulario(Model model){
-        model.addAttribute("autor", new Autor());
 
-        return "/autor/formulario";
+    //////////////////////////////////////////
+    // CREAR - Crear un nuevo autor
+    /////////////////////////////////////////
+    @PostMapping("/autores2")
+    public Autor crear(@RequestBody Autor autor) {
+        return autorRepository.save(autor); // Guardar el nuevo autor en la base de datos 
     }
 
-    @PostMapping("/autor/form")
-    public String crear( Autor autor){
-       autorRepository.save(autor);
-        return "redirect:/autores";
-    }
-
-    /////ACTUALIZAR
-    @GetMapping("/autor/editar/{id}")
-    public String actualizar(@PathVariable int id, Model model){
-
+    ////////////////////////////////////////////////
+    // ELIMINAR - Eliminar un autor por ID
+    ///////////////////////////////////////////////
+    @DeleteMapping("/autores2/{id}")
+    public ResponseEntity<Boolean> eliminarAutor(@PathVariable int id) {
+        // Buscar el autor por ID
         Optional<Autor> autor = autorRepository.findById(id);
-        model.addAttribute("autor", autor);
 
-        return "autor/formulario";
+        // Verificar si el autor existe
+        if (autor.isPresent()) {
+            autorRepository.delete(autor.get()); // Eliminar el autor de la base de datos
+            return ResponseEntity.ok(true); // Devolver éxito
+        } else {
+            return ResponseEntity.ok(false); // Devolver falso si el autor no existe
+        }
     }
 
 
-    //Eliminar
-    @GetMapping("/autor/eliminar/{id}")
-    public String eliminar(@PathVariable int id){
-        autorRepository.deleteById(id);
+    ///////////////////////////////////////////////////////////
+    // EDITAR - Actualizar la información de un autor por ID
+    //////////////////////////////////////////////////////////
+    @PutMapping("/autores2/{id}")
+    public ResponseEntity<Autor> updateUser(@PathVariable int id, @RequestBody Autor autorData) {
+        // Buscar el autor por ID
+        Optional<Autor> optionalAutor = autorRepository.findById(id);
 
-        return "redirect:/autores";
+        // Verificar si el autor existe
+        if (optionalAutor.isPresent()) {
+            Autor autor = optionalAutor.get();
 
+            // Actualizar los campos del autor con los datos proporcionados
+            autor.setNombre(autorData.getNombre());
+            autor.setApellido(autorData.getApellido());
+            autor.setEmail(autorData.getEmail());
+
+            // Guardar los cambios en la base de datos
+            Autor userSaved = autorRepository.save(autor);
+            return ResponseEntity.ok(userSaved); // Devolver el autor actualizado
+        } else {
+            return ResponseEntity.notFound().build(); // Devolver error si el autor no existe
+        }
     }
 
 }
