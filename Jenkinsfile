@@ -1,4 +1,4 @@
-pipeline {
+node {
     agent any
 
     stages {
@@ -10,7 +10,7 @@ pipeline {
 
         stage('Construir y Empaquetar') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
 
