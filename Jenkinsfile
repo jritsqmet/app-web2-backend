@@ -1,27 +1,32 @@
 pipeline {
-    agent any
+	agent any
 
-    stages {
-        stage('Revisión') {
-            steps {
-                checkout scm
-            }
-        }
+	environment {
+		mavenHome = tool 'jenkins-maven'
+	}
 
-        stage('Construir y Empaquetar') {
-            steps {
-                // Utilizar Maven para compilar y empaquetar el proyecto
-                bat 'mvn clean package'
-            }
-        }
+	tools {
+		jdk 'java-17'
+	}
 
-        
+	stages {
 
-        stage('Desplegar') {
-            steps {
-                // Ejemplo de comando para ejecutar el jar generado por Maven
-                sh 'java -jar target/nombre-del-archivo.jar'
-            }
-        }
-    }
+		stage('Build'){
+			steps {
+				bat "mvn clean install -DskipTests"
+			}
+		}
+
+		stage('Test'){
+			steps{
+				bat "mvn test"
+			}
+		}
+
+		stage('Deploy') {
+			steps {
+			    bat "mvn jar:jar deploy:deploy"
+			}
+		}
+	}
 }
