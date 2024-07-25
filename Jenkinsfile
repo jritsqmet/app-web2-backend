@@ -4,7 +4,7 @@ node {
     }
 
     stage( 'Instalación de dependencias' ){
-        bat "mvn clean"
+        bat "C:\\Users\\TW\\Downloads\\borrar\\apache-maven-3.9.8-bin\\apache-maven-3.9.8\\bin\\mvn.cmd clean"
     }
 
     stage('Contruir Aplicacion'){
