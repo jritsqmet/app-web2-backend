@@ -8,6 +8,6 @@ node {
     }
 
     stage('Contruir Aplicacion'){
-        bat( 'ng build' )
+        bat( 'C:\\Users\\TW\\Downloads\\borrar\\apache-maven-3.9.8-bin\\apache-maven-3.9.8\\bin\\mvn.cmd package' )
     }
 }
