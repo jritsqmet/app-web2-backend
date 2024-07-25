@@ -4,7 +4,7 @@ node {
     }
 
     stage( 'Instalación de dependencias' ){
-        bat 'npm install' 
+        bat "mvn clean"
     }
 
     stage('Contruir Aplicacion'){
