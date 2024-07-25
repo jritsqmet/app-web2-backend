@@ -1,7 +1,7 @@
 pipeline {
 	agent any
 	stage('check'){
-		checksum scm
+		checkout scm
 	}
 	
 
