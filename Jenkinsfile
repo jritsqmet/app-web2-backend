@@ -1,28 +1,13 @@
 node {
-	agent any
-	stage('check'){
-		checkout scm
-	}
-	
+    stage( 'verificar repositorio' ){
+        checkout scm
+    }
 
-	
+    stage( 'Instalación de dependencias' ){
+        bat 'npm install' 
+    }
 
-	stage('Build'){
-		steps {
-			bat "mvn clean install -DskipTests"
-		}
-	}
-
-	stage('Test'){
-		steps{
-			bat "mvn test"
-		}
-	}
-
-	stage('Deploy') {
-		steps {
-		    bat "mvn jar:jar deploy:deploy"
-		}
-	}
-	
+    stage('Contruir Aplicacion'){
+        bat( 'ng build' )
+    }
 }
